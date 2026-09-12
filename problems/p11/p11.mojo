@@ -36,6 +36,18 @@ def pooling(
     var local_i = thread_idx.x
     # FILL ME IN (roughly 10 lines)
 
+    if local_i < TPB and global_i < SIZE:
+        shared[local_i] = a[global_i]
+    barrier()
+
+    if local_i < TPB and global_i < SIZE:
+        if local_i < 1:
+            output[global_i] = shared[local_i]
+        elif local_i < 2:
+            output[global_i] = shared[local_i] + shared[local_i - 1]
+        else:
+            output[global_i] = shared[local_i] + shared[local_i - 1] + shared[local_i - 2]
+    
 
 # ANCHOR_END: pooling
 
